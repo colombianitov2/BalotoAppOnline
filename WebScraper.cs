@@ -47,7 +47,8 @@ namespace BalotoAppOnline
             {
                 string url = paginaActual == 1 ? urlBase : $"{urlBase}?page={paginaActual}";
                 OnProgreso?.Invoke($"Cargando página {paginaActual}: {url}");
-                await page.GoToAsync(url, WaitUntilNavigation.Networkidle0);
+                await page.GoToAsync(url, WaitUntilNavigation.DOMContentLoaded);
+                await Task.Delay(700);
 
                 // Cerrar posibles modales en la primera página
                 if (paginaActual == 1)
@@ -166,6 +167,9 @@ namespace BalotoAppOnline
         {
             string[] rutasChromeSistema =
             {
+                Path.Combine(Environment.GetEnvironmentVariable("ProgramW6432") ?? string.Empty, "Google", "Chrome", "Application", "chrome.exe"),
+                Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles") ?? string.Empty, "Google", "Chrome", "Application", "chrome.exe"),
+                Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles(x86)") ?? string.Empty, "Google", "Chrome", "Application", "chrome.exe"),
                 Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Google", "Chrome", "Application", "chrome.exe"),
                 Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Google", "Chrome", "Application", "chrome.exe"),
                 Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Google", "Chrome", "Application", "chrome.exe")

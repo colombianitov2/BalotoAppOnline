@@ -19,12 +19,13 @@ namespace BalotoAppOnline
             ConfigurarReloj();
             ConfigurarProgreso();
             ConfigurarControles();
+            Shown += (s, e) => CentrarEnAreaTrabajo();
         }
 
         private void ConfigurarVentana()
         {
             Text = "Generador de Baloto Online";
-            ClientSize = new Size(600, 760);
+            ClientSize = new Size(620, 760);
             MinimumSize = Size;
             MaximumSize = Size;
             FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -81,11 +82,14 @@ namespace BalotoAppOnline
             {
                 Dock = DockStyle.Fill,
                 ColumnCount = 3,
-                RowCount = 1
+                RowCount = 3
             };
             centralPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 8));
             centralPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 84));
             centralPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 8));
+            centralPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
+            centralPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 540));
+            centralPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
 
             FlowLayoutPanel flow = new FlowLayoutPanel
             {
@@ -93,7 +97,7 @@ namespace BalotoAppOnline
                 FlowDirection = FlowDirection.TopDown,
                 WrapContents = false,
                 AutoSize = false,
-                AutoScroll = true,
+                AutoScroll = false,
                 BackColor = Color.Transparent,
                 Padding = new Padding(0, 8, 0, 8)
             };
@@ -145,9 +149,17 @@ namespace BalotoAppOnline
                 btnAcerca
             });
 
-            centralPanel.Controls.Add(flow, 1, 0);
+            centralPanel.Controls.Add(flow, 1, 1);
             mainPanel.Controls.Add(centralPanel, 0, 0);
             Controls.Add(mainPanel);
+        }
+
+        private void CentrarEnAreaTrabajo()
+        {
+            Rectangle area = Screen.FromControl(this).WorkingArea;
+            Location = new Point(
+                area.Left + (area.Width - Width) / 2,
+                area.Top + (area.Height - Height) / 2);
         }
 
         private RoundedButton CrearBoton(string texto, Color fondoNormal, Color textoNormal, Color fondoHover)
