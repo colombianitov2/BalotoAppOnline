@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using PuppeteerSharp;
@@ -19,11 +20,19 @@ namespace BalotoAppOnline
             int paginaActual = 1;
             bool haySiguiente = true;
 
-            OnProgreso?.Invoke("Descargando Chromium (primera vez)...");
-            await new BrowserFetcher().DownloadAsync();
+            string navegadorIncluido = BuscarNavegadorIncluido();
+            if (string.IsNullOrWhiteSpace(navegadorIncluido))
+            {
+                OnProgreso?.Invoke("Descargando Chromium (primera vez)...");
+                await new BrowserFetcher().DownloadAsync();
+            }
 
             OnProgreso?.Invoke("Iniciando navegador...");
-            using var browser = await Puppeteer.LaunchAsync(new LaunchOptions { Headless = true });
+            using var browser = await Puppeteer.LaunchAsync(new LaunchOptions
+            {
+                Headless = true,
+                ExecutablePath = navegadorIncluido
+            });
             using var page = await browser.NewPageAsync();
 
             while (haySiguiente)
@@ -143,6 +152,38 @@ namespace BalotoAppOnline
                 System.Globalization.DateTimeStyles.None, out DateTime f))
                 return f;
             return DateTime.MinValue;
+        }
+
+        private static string BuscarNavegadorIncluido()
+        {
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            string[] patrones =
+            {
+                Path.Combine(baseDir, "ChromeHeadlessShell", "Win64-*", "chrome-headless-shell-win64", "chrome-headless-shell.exe"),
+                Path.Combine(baseDir, "Chrome", "Win64-*", "chrome-win64", "chrome.exe")
+            };
+
+            foreach (string patron in patrones)
+            {
+                string directorio = Path.GetDirectoryName(patron);
+                string archivo = Path.GetFileName(patron);
+                int indiceComodin = directorio?.IndexOf("*", StringComparison.Ordinal) ?? -1;
+                if (indiceComodin < 0)
+                    continue;
+
+                string raiz = directorio.Substring(0, indiceComodin);
+                if (!Directory.Exists(raiz))
+                    continue;
+
+                string encontrado = Directory
+                    .GetFiles(raiz, archivo, SearchOption.AllDirectories)
+                    .FirstOrDefault();
+
+                if (!string.IsNullOrWhiteSpace(encontrado))
+                    return encontrado;
+            }
+
+            return null;
         }
     }
 }
