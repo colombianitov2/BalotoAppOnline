@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using PuppeteerSharp;
 using HtmlAgilityPack;
@@ -21,6 +22,9 @@ namespace BalotoAppOnline
             bool haySiguiente = true;
 
             string chromeInstalado = BuscarGoogleChromeInstalado();
+            if (string.IsNullOrWhiteSpace(chromeInstalado))
+                chromeInstalado = BuscarNavegadorIncluido();
+
             if (string.IsNullOrWhiteSpace(chromeInstalado))
             {
                 OnProgreso?.Invoke("Descargando Chromium (primera vez)...");
@@ -173,6 +177,28 @@ namespace BalotoAppOnline
                     continue;
 
                 return ruta;
+            }
+
+            return null;
+        }
+
+        private static string BuscarNavegadorIncluido()
+        {
+            string baseDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string[] nombres =
+            {
+                "chrome-headless-shell.exe",
+                "chrome.exe"
+            };
+
+            foreach (string nombre in nombres)
+            {
+                string encontrado = Directory
+                    .GetFiles(baseDir, nombre, SearchOption.AllDirectories)
+                    .FirstOrDefault();
+
+                if (!string.IsNullOrWhiteSpace(encontrado))
+                    return encontrado;
             }
 
             return null;
