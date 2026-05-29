@@ -1,0 +1,9 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="BalotoAppOnline.csproj" Id="b685331b-78ea-4513-8ac4-61f69077fa88">
+    <Platform Solution="*|x86" Project="x86" />
+  </Project>
+</Solution>
