@@ -24,11 +24,10 @@ namespace BalotoAppOnline
         private void ConfigurarVentana()
         {
             Text = "Generador de Baloto Online";
-            Rectangle areaTrabajo = Screen.PrimaryScreen.WorkingArea;
-            Size = new Size(620, Math.Min(820, areaTrabajo.Height - 30));
-            MinimumSize = new Size(560, Math.Min(650, areaTrabajo.Height - 30));
-            MaximumSize = new Size(620, areaTrabajo.Height - 10);
-            FormBorderStyle = FormBorderStyle.Sizable;
+            ClientSize = new Size(600, 760);
+            MinimumSize = Size;
+            MaximumSize = Size;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             StartPosition = FormStartPosition.CenterScreen;
             BackColor = Color.FromArgb(240, 242, 245);
             Font = new Font("Segoe UI", 10, FontStyle.Regular);
@@ -156,14 +155,14 @@ namespace BalotoAppOnline
             return new RoundedButton
             {
                 Text = texto,
-                Size = new Size(480, 44),
+                Size = new Size(480, 38),
                 NormalBackColor = fondoNormal,
                 NormalForeColor = textoNormal,
                 HoverBackColor = fondoHover,
                 HoverForeColor = textoNormal,
                 BorderRadius = 14,
                 Font = new Font("Segoe UI", 11, FontStyle.Regular),
-                Margin = new Padding(0, 3, 0, 3)
+                Margin = new Padding(0, 2, 0, 2)
             };
         }
 

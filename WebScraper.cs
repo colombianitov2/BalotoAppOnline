@@ -20,18 +20,22 @@ namespace BalotoAppOnline
             int paginaActual = 1;
             bool haySiguiente = true;
 
-            string navegadorIncluido = BuscarNavegadorIncluido();
-            if (string.IsNullOrWhiteSpace(navegadorIncluido))
+            string chromeInstalado = BuscarGoogleChromeInstalado();
+            if (string.IsNullOrWhiteSpace(chromeInstalado))
             {
                 OnProgreso?.Invoke("Descargando Chromium (primera vez)...");
                 await new BrowserFetcher().DownloadAsync();
+            }
+            else
+            {
+                OnProgreso?.Invoke("Usando Google Chrome instalado.");
             }
 
             OnProgreso?.Invoke("Iniciando navegador...");
             using var browser = await Puppeteer.LaunchAsync(new LaunchOptions
             {
                 Headless = true,
-                ExecutablePath = navegadorIncluido
+                ExecutablePath = chromeInstalado
             });
             using var page = await browser.NewPageAsync();
 
@@ -154,30 +158,8 @@ namespace BalotoAppOnline
             return DateTime.MinValue;
         }
 
-        private static string BuscarNavegadorIncluido()
+        private static string BuscarGoogleChromeInstalado()
         {
-            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
-            string[] ejecutables =
-            {
-                "chrome-headless-shell.exe",
-                "chrome.exe"
-            };
-
-            foreach (string ejecutable in ejecutables)
-            {
-                string encontrado = Directory
-                    .GetFiles(baseDir, ejecutable, SearchOption.AllDirectories)
-                    .FirstOrDefault(ruta =>
-                        ruta.IndexOf("ChromeHeadlessShell", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                        ruta.IndexOf(Path.Combine("Chrome", "Win64-"), StringComparison.OrdinalIgnoreCase) >= 0);
-
-                if (!string.IsNullOrWhiteSpace(encontrado))
-                {
-                    OnProgreso?.Invoke("Usando navegador incluido.");
-                    return encontrado;
-                }
-            }
-
             string[] rutasChromeSistema =
             {
                 Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Google", "Chrome", "Application", "chrome.exe"),
@@ -190,7 +172,6 @@ namespace BalotoAppOnline
                 if (!File.Exists(ruta))
                     continue;
 
-                OnProgreso?.Invoke("Usando Google Chrome instalado.");
                 return ruta;
             }
 

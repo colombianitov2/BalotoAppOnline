@@ -15,8 +15,9 @@ namespace BalotoAppOnline
         public ConfiguracionForm()
         {
             Text = "Configuración";
-            Size = new Size(540, 430);
-            MinimumSize = new Size(540, 430);
+            ClientSize = new Size(500, 390);
+            MinimumSize = Size;
+            MaximumSize = Size;
             StartPosition = FormStartPosition.CenterParent;
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
@@ -32,12 +33,12 @@ namespace BalotoAppOnline
                 Padding = new Padding(22),
                 BackColor = Color.White
             };
-            panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
-            panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 56));
-            panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 56));
-            panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 56));
-            panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 96));
+            panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 48));
             panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 52));
+            panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 52));
+            panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 52));
+            panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 88));
+            panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 44));
 
             panel.Controls.Add(new Label
             {
@@ -56,7 +57,7 @@ namespace BalotoAppOnline
             btnComentarios.Click += (s, e) => new ComentariosForm().ShowDialog(this);
             panel.Controls.Add(btnComentarios, 0, 2);
 
-            Button btnGithub = CrearBoton("Abrir perfil de GitHub", Color.FromArgb(245, 246, 248), Color.FromArgb(35, 35, 35));
+            Button btnGithub = CrearBoton("Abrir GitHub", Color.FromArgb(245, 246, 248), Color.FromArgb(35, 35, 35));
             btnGithub.Click += (s, e) => ActualizadorGithub.AbrirPerfil();
             panel.Controls.Add(btnGithub, 0, 3);
 
@@ -88,7 +89,7 @@ namespace BalotoAppOnline
                 ForeColor = frente,
                 FlatStyle = FlatStyle.Flat,
                 Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                Margin = new Padding(0, 6, 0, 6)
+                Margin = new Padding(0, 5, 0, 5)
             };
             boton.FlatAppearance.BorderSize = 0;
             return boton;
