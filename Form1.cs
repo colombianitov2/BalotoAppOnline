@@ -24,10 +24,11 @@ namespace BalotoAppOnline
         private void ConfigurarVentana()
         {
             Text = "Generador de Baloto Online";
-            Size = new Size(620, 870); // Altura aumentada a 870 para más espacio
-            MinimumSize = Size;
-            MaximumSize = Size;
-            FormBorderStyle = FormBorderStyle.FixedSingle;
+            Rectangle areaTrabajo = Screen.PrimaryScreen.WorkingArea;
+            Size = new Size(620, Math.Min(820, areaTrabajo.Height - 30));
+            MinimumSize = new Size(560, Math.Min(650, areaTrabajo.Height - 30));
+            MaximumSize = new Size(620, areaTrabajo.Height - 10);
+            FormBorderStyle = FormBorderStyle.Sizable;
             StartPosition = FormStartPosition.CenterScreen;
             BackColor = Color.FromArgb(240, 242, 245);
             Font = new Font("Segoe UI", 10, FontStyle.Regular);
@@ -73,12 +74,9 @@ namespace BalotoAppOnline
             {
                 Dock = DockStyle.Fill,
                 ColumnCount = 1,
-                RowCount = 4
+                RowCount = 1
             };
-            mainPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 5));
-            mainPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30));
-            mainPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 85));
-            mainPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 5));
+            mainPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
 
             TableLayoutPanel centralPanel = new TableLayoutPanel
             {
@@ -96,8 +94,9 @@ namespace BalotoAppOnline
                 FlowDirection = FlowDirection.TopDown,
                 WrapContents = false,
                 AutoSize = false,
+                AutoScroll = true,
                 BackColor = Color.Transparent,
-                Padding = new Padding(0, 10, 0, 10)
+                Padding = new Padding(0, 8, 0, 8)
             };
 
             // ========== BOTONES AMARILLOS (generadores) en el nuevo orden ==========
@@ -148,7 +147,7 @@ namespace BalotoAppOnline
             });
 
             centralPanel.Controls.Add(flow, 1, 0);
-            mainPanel.Controls.Add(centralPanel, 0, 2);
+            mainPanel.Controls.Add(centralPanel, 0, 0);
             Controls.Add(mainPanel);
         }
 
@@ -157,14 +156,14 @@ namespace BalotoAppOnline
             return new RoundedButton
             {
                 Text = texto,
-                Size = new Size(480, 52),
+                Size = new Size(480, 44),
                 NormalBackColor = fondoNormal,
                 NormalForeColor = textoNormal,
                 HoverBackColor = fondoHover,
                 HoverForeColor = textoNormal,
                 BorderRadius = 14,
                 Font = new Font("Segoe UI", 11, FontStyle.Regular),
-                Margin = new Padding(0, 4, 0, 4)
+                Margin = new Padding(0, 3, 0, 3)
             };
         }
 

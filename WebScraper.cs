@@ -157,30 +157,41 @@ namespace BalotoAppOnline
         private static string BuscarNavegadorIncluido()
         {
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
-            string[] patrones =
+            string[] ejecutables =
             {
-                Path.Combine(baseDir, "ChromeHeadlessShell", "Win64-*", "chrome-headless-shell-win64", "chrome-headless-shell.exe"),
-                Path.Combine(baseDir, "Chrome", "Win64-*", "chrome-win64", "chrome.exe")
+                "chrome-headless-shell.exe",
+                "chrome.exe"
             };
 
-            foreach (string patron in patrones)
+            foreach (string ejecutable in ejecutables)
             {
-                string directorio = Path.GetDirectoryName(patron);
-                string archivo = Path.GetFileName(patron);
-                int indiceComodin = directorio?.IndexOf("*", StringComparison.Ordinal) ?? -1;
-                if (indiceComodin < 0)
-                    continue;
-
-                string raiz = directorio.Substring(0, indiceComodin);
-                if (!Directory.Exists(raiz))
-                    continue;
-
                 string encontrado = Directory
-                    .GetFiles(raiz, archivo, SearchOption.AllDirectories)
-                    .FirstOrDefault();
+                    .GetFiles(baseDir, ejecutable, SearchOption.AllDirectories)
+                    .FirstOrDefault(ruta =>
+                        ruta.IndexOf("ChromeHeadlessShell", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                        ruta.IndexOf(Path.Combine("Chrome", "Win64-"), StringComparison.OrdinalIgnoreCase) >= 0);
 
                 if (!string.IsNullOrWhiteSpace(encontrado))
+                {
+                    OnProgreso?.Invoke("Usando navegador incluido.");
                     return encontrado;
+                }
+            }
+
+            string[] rutasChromeSistema =
+            {
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Google", "Chrome", "Application", "chrome.exe"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "Google", "Chrome", "Application", "chrome.exe"),
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Google", "Chrome", "Application", "chrome.exe")
+            };
+
+            foreach (string ruta in rutasChromeSistema)
+            {
+                if (!File.Exists(ruta))
+                    continue;
+
+                OnProgreso?.Invoke("Usando Google Chrome instalado.");
+                return ruta;
             }
 
             return null;

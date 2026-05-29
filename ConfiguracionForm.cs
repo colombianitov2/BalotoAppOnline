@@ -15,7 +15,8 @@ namespace BalotoAppOnline
         public ConfiguracionForm()
         {
             Text = "Configuración";
-            Size = new Size(520, 360);
+            Size = new Size(540, 430);
+            MinimumSize = new Size(540, 430);
             StartPosition = FormStartPosition.CenterParent;
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
@@ -31,12 +32,12 @@ namespace BalotoAppOnline
                 Padding = new Padding(22),
                 BackColor = Color.White
             };
-            panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 44));
+            panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
             panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 56));
             panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 56));
             panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 56));
-            panel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-            panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 46));
+            panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 96));
+            panel.RowStyles.Add(new RowStyle(SizeType.Absolute, 52));
 
             panel.Controls.Add(new Label
             {
@@ -55,8 +56,8 @@ namespace BalotoAppOnline
             btnComentarios.Click += (s, e) => new ComentariosForm().ShowDialog(this);
             panel.Controls.Add(btnComentarios, 0, 2);
 
-            Button btnGithub = CrearBoton("Abrir GitHub", Color.FromArgb(245, 246, 248), Color.FromArgb(35, 35, 35));
-            btnGithub.Click += (s, e) => ActualizadorGithub.AbrirRepositorio();
+            Button btnGithub = CrearBoton("Abrir perfil de GitHub", Color.FromArgb(245, 246, 248), Color.FromArgb(35, 35, 35));
+            btnGithub.Click += (s, e) => ActualizadorGithub.AbrirPerfil();
             panel.Controls.Add(btnGithub, 0, 3);
 
             lblEstado = new Label
@@ -65,7 +66,7 @@ namespace BalotoAppOnline
                 Dock = DockStyle.Fill,
                 ForeColor = Color.FromArgb(90, 90, 90),
                 TextAlign = ContentAlignment.TopLeft,
-                Padding = new Padding(0, 10, 0, 0)
+                Padding = new Padding(0, 12, 0, 0)
             };
             panel.Controls.Add(lblEstado, 0, 4);
 

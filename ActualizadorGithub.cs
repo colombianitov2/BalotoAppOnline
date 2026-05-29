@@ -24,6 +24,7 @@ namespace BalotoAppOnline
         private const string Repositorio = "BalotoAppOnline";
 
         public static string UrlRepositorio => "https://github.com/" + ObtenerCuentaGithub() + "/" + Repositorio;
+        public static string UrlPerfil => "https://github.com/" + ObtenerCuentaGithub();
 
         public static async Task<ResultadoActualizacion> BuscarYDescargarAsync()
         {
@@ -88,6 +89,11 @@ namespace BalotoAppOnline
         public static void AbrirRepositorio()
         {
             Process.Start(new ProcessStartInfo(UrlRepositorio) { UseShellExecute = true });
+        }
+
+        public static void AbrirPerfil()
+        {
+            Process.Start(new ProcessStartInfo(UrlPerfil) { UseShellExecute = true });
         }
 
         public static void AbrirRelease(string url)
